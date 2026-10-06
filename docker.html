@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DockerFolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Montserrat:wght@600;800&family=Lora:wght@500&display=swap">
+<style>
+:root{
+  --bg:#070a10; --panel:#0d1119; --panel2:#131a27; --line:#1d1640;
+  --cyan:#2bb5f0; --violet:#9b4dff; --indigo:#3730c9; --ink:#e9edf5; --muted:#8e9bb3;
+  --grad:linear-gradient(90deg,#000 0%,#10104a 45%,var(--indigo) 100%);
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --display:"Montserrat","Segoe UI",system-ui,sans-serif;
+  --serif:"Lora",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);min-height:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+[hidden]{display:none!important}
+
+#splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(48px,12vh,120px);padding:24px}
+.logo{display:flex;align-items:center;gap:16px;font-family:var(--mono);font-weight:700;letter-spacing:-.02em}
+.logo svg{width:1.1em;height:1.1em;flex:none}
+.logo b{color:var(--cyan)}
+#splash .logo{font-size:clamp(2.2rem,7vw,4.6rem)}
+.enter{padding:18px 44px;border-radius:999px;background:linear-gradient(90deg,#000,var(--indigo));font-weight:800;font-size:1.4rem;letter-spacing:.04em;color:#8b5cf6;transition:transform .15s,color .15s}
+.enter:hover{transform:scale(1.05);color:#6ccbf5}
+
+/* shell */
+header{display:flex;align-items:center;padding:18px 28px;background:var(--panel);border-bottom:2px solid var(--line)}
+header .logo{font-size:1.25rem;gap:10px}
+nav{display:flex;gap:6px;width:max-content;margin:18px auto;padding:6px;background:var(--panel2);border-radius:14px}
+nav button{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;font-family:var(--serif);font-size:.85rem;text-transform:uppercase;color:var(--muted);border:1px solid transparent}
+nav button svg{width:18px;height:18px;fill:currentColor}
+nav button[aria-selected=true]{color:var(--ink);background:rgba(43,181,240,.12);border-color:rgba(43,181,240,.5)}
+main{padding:12px clamp(16px,5vw,60px) 60px}
+
+.hero{border:2px solid var(--violet);padding:0;min-height:min(62vh,560px);display:grid}
+.hero div{background:var(--grad);border-radius:0 48px 48px 0;padding:clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:flex-end;gap:12px}
+.hero h1{font-size:clamp(1.8rem,4.5vw,3.2rem);font-weight:800;max-width:16ch}
+.hero p{max-width:52ch;color:#c9d0ff;line-height:1.6}
+
+/* Cards type design*/
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:1100px;margin:30px auto 0}
+.card{background:var(--grad);border-radius:48px;padding:36px 24px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.avatar{width:84px;height:84px;border-radius:20px;overflow:hidden;flex:none}
+.avatar svg{width:100%;height:100%;display:block}
+.name{font-weight:800;font-size:1.25rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.2;overflow-wrap:anywhere}
+.bio{font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;line-height:1.6;max-width:26ch}
+.term{width:100%;background:#0a0c12;border-radius:4px;padding:10px 12px;font-family:var(--mono);font-size:.8rem;color:#f0643c;text-align:left;min-height:36px}
+.term span{color:var(--ink)}
+.pill{padding:9px 20px;border-radius:999px;background:rgba(10,12,18,.7);font-family:var(--mono);font-size:.9rem;margin-top:auto;transition:background .15s}
+.pill:hover{background:rgba(10,12,18,1)}
+
+/* pfp naten */
+.profile{display:grid;grid-template-columns:minmax(220px,300px) 1fr;background:var(--grad);border-radius:48px;max-width:1100px;margin:24px auto 0;overflow:hidden}
+.side{padding:36px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.side .avatar{width:96px;height:96px}
+.tree{padding:36px 28px 90px;font-family:var(--serif);color:#b4bdd4;position:relative;min-height:380px}
+.tree ul{list-style:none;padding-left:0}
+.tree ul ul{padding-left:22px}
+.tree li{margin:6px 0}
+.tree .row{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:3px 6px;border-radius:6px;font-size:.95rem}
+.tree button.row:hover{background:rgba(255,255,255,.08)}
+.tree svg{width:20px;height:20px;fill:#8e9bb3;flex:none}
+.tree .file{font-family:var(--display);font-size:.8rem;padding-left:34px}
+.actions{position:absolute;right:28px;bottom:24px;display:flex;align-items:center;gap:22px;font-family:var(--mono);font-size:.85rem}
+.actions .edit{display:flex;gap:8px;align-items:center}
+.actions .close{background:var(--cyan);color:#06222f;font-weight:700;padding:9px 22px;border-radius:999px}
+.tree .branch{padding-left:22px}
+.tree .root{cursor:default}
+.tree a.row{color:inherit;text-decoration:none}
+.tree a.row:hover{background:rgba(255,255,255,.08)}
+.tree .file{padding-left:6px}
+.tree [aria-expanded=true] svg{fill:var(--cyan)}
+.status{font-family:var(--mono);font-size:.8rem;color:var(--muted);padding:6px}
+.status.err{color:#ff8a70}
+[contenteditable=true]{outline:2px dashed var(--cyan);outline-offset:4px;border-radius:4px}
+
+@media(max-width:760px){
+  .profile{grid-template-columns:1fr;border-radius:32px}
+  .hero div{border-radius:0 32px 32px 0}
+  nav{width:auto;margin-inline:16px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- SVG building blocks reused across the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="10" fill="none" stroke="#1b7fd1" stroke-width="3"/><circle cx="24" cy="17" r="8" fill="none" stroke="#2bb5f0" stroke-width="3"/><path d="M10 26l14-5 14 5v10L24 42 10 36z" fill="#1b7fd1"/><path d="M24 21v21" stroke="#0b3a66" stroke-width="2"/></symbol>
+  <symbol id="folder" viewBox="0 0 24 24"><path d="M2 5a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M6 2h8l6 6v14H6zm7 1.5V9h5.5z" fill-rule="evenodd"/></symbol>
+  <symbol id="grid" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h8v8h-8zm2 2v4h4v-4z" fill-rule="evenodd"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></symbol>
+  <symbol id="photo" viewBox="0 0 80 80"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9dcff"/><stop offset="1" stop-color="#e6f6ff"/></linearGradient></defs><rect width="80" height="80" fill="url(#sky)"/><ellipse cx="26" cy="18" rx="12" ry="6" fill="#fff"/><ellipse cx="34" cy="14" rx="8" ry="6" fill="#fff"/><path d="M0 56c20-14 40-6 80-10v34H0z" fill="#b8d56b"/><path d="M0 66c24-12 50-6 80-8v22H0z" fill="#86a317"/></symbol>
+</svg>
+
+<section id="splash">
+  <div class="logo"><svg><use href="#logo"/></svg><span>Docker<b>Folio</b></span></div>
+  <button class="enter" id="enter">ENTER</button>
+</section>
+
+
+<div id="app" hidden>
+  <header><div class="logo"><svg><use href="#logo"/></svg><span>Docker<b>Folio</b></span></div></header>
+  <nav role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-overview" aria-selected="true"><svg><use href="#grid"/></svg>Overview</button>
+    <button role="tab" id="tab-portfolios" aria-selected="false"><svg><use href="#folder"/></svg>Portfolio's</button>
+  </nav>
+  <main>
+    <section id="overview" class="hero" aria-labelledby="tab-overview">
+      <div>
+        <h1></h1>
+        <p></p>
+      </div>
+    </section>
+    <section id="portfolios" aria-labelledby="tab-portfolios" hidden>
+      <div class="grid" id="cards"></div>
+      <article class="profile" id="profile" hidden></article>
+    </section>
+  </main>
+</div>
+
+<script src="docker.js"></script>
+</body>
+</html>
