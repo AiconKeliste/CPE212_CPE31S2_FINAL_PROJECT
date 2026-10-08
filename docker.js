@@ -2,15 +2,17 @@
 const BIO = "hatdogs";
 // repo links naten
 const members = [
-  {name:"Jerald Interno",      bio:BIO, repo:"JeraldSanInterno/CPE232_Jerald_Interno"},
-  {name:"Melquisedec Iquin",   bio:BIO, repo:"MelquisedecIquin/CPE212_Iquin"},
-  {name:"Kathlyn Javillonar",  bio:BIO, repo:"MadhelKathlynAnnJavillonar/CPE212_Javillonar"},
-  {name:"Aicon Keliste",       bio:BIO, repo:"AiconKeliste/CPE212_KELISTE"}
+  {name:"Jerald Interno",      bio:BIO, repo:"JeraldSanInterno/CPE232_Jerald_Interno",       photo:"photos/jerald.jpg"},
+  {name:"Melquisedec Iquin",   bio:BIO, repo:"MelquisedecIquin/CPE212_Iquin",                photo:"photos/melquisedec.jpg"},
+  {name:"Kathlyn Javillonar",  bio:BIO, repo:"MadhelKathlynAnnJavillonar/CPE212_Javillonar", photo:"photos/kathlyn.jpg"},
+  {name:"Aicon Keliste",       bio:BIO, repo:"AiconKeliste/CPE212_KELISTE",                  photo:"photos/aicon.png"}
 ];
 
 const $ = s => document.querySelector(s);
 const icon = id => `<svg><use href="#${id}"/></svg>`;
-const avatar = () => `<div class="avatar">${'<svg viewBox="0 0 80 80"><use href="#photo"/></svg>'}</div>`;
+const avatar = m => m.photo
+  ? `<div class="avatar"><img src="${m.photo}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover"></div>`
+  : `<div class="avatar"><svg viewBox="0 0 80 80"><use href="#photo"/></svg></div>`;
 const terms = () => `<div class="term">&gt;_<span></span></div><div class="term">&gt;_<span></span></div>`;
 
 $("#enter").onclick = () => { $("#splash").hidden = true; $("#app").hidden = false; show("overview"); };
@@ -28,7 +30,7 @@ $("#tab-portfolios").onclick = () => show("portfolios");
 function renderCards(){
   $("#cards").innerHTML = members.map((m,i) => `
     <div class="card">
-      ${avatar()}
+      ${avatar(m)}
       <h2 class="name">${m.name}</h2>
       <p class="bio">${m.bio}</p>
       ${terms()}
@@ -44,7 +46,7 @@ function openProfile(i){
   p.hidden = false;
   p.innerHTML = `
     <div class="side">
-      ${avatar()}
+      ${avatar(m)}
       <h2 class="name" id="p-name">${m.name}</h2>
       <p class="bio" id="p-bio">${m.bio}</p>
       ${terms()}
