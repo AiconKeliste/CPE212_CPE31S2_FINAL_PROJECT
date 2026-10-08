@@ -1,11 +1,11 @@
 // bio ng lahat interchangable naman
-const BIO = "Specializes in multi-stage Docker builds, layer caching, and minimizing container image attack surfaces for enterprise Linux deployments.";
+const BIO = "hatdogs";
 // repo links naten
 const members = [
-  {name:"Jerald Interno",      bio:BIO, repo:"YOUR-USERNAME/YOUR-REPO"},
-  {name:"Melquisedec Iquin",   bio:BIO, repo:"YOUR-USERNAME/YOUR-REPO"},
-  {name:"Kathlyn Javillonar",  bio:BIO, repo:"YOUR-USERNAME/YOUR-REPO"},
-  {name:"Aicon Keliste",       bio:BIO, repo:"YOUR-USERNAME/YOUR-REPO"}
+  {name:"Jerald Interno",      bio:BIO, repo:"JeraldSanInterno/CPE232_Jerald_Interno"},
+  {name:"Melquisedec Iquin",   bio:BIO, repo:"MelquisedecIquin/CPE212_Iquin"},
+  {name:"Kathlyn Javillonar",  bio:BIO, repo:"MadhelKathlynAnnJavillonar/CPE212_Javillonar"},
+  {name:"Aicon Keliste",       bio:BIO, repo:"AiconKeliste/CPE212_KELISTE"}
 ];
 
 const $ = s => document.querySelector(s);
@@ -53,6 +53,7 @@ function openProfile(i){
       <div class="row root">${icon("folder")}PORTFOLIO'S</div>
       <div id="tree-body" class="branch"></div>
       <div class="actions">
+        <button class="edit" id="reload">${icon("refresh")}Reload</button>
         <button class="edit" id="edit">${icon("pen")}Edit Profile</button>
         <button class="close" id="close">Close</button>
       </div>
@@ -61,22 +62,33 @@ function openProfile(i){
   loadTree(m.repo, "", $("#tree-body"));
   $("#close").onclick = closeProfile;
   $("#edit").onclick = () => toggleEdit(i);
+  $("#reload").onclick = () => reloadTree(m.repo);
   p.scrollIntoView({behavior:"smooth", block:"start"});
 }
 
 const esc = t => String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let freshUntil = 0; 
 
 async function fetchDir(repo, path){
   const key = "gh:" + repo + ":" + path;
   try { const hit = sessionStorage.getItem(key); if (hit) return JSON.parse(hit); } catch(e){}
   const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`,
-                          {headers:{Accept:"application/vnd.github+json"}});
+                          {headers:{Accept:"application/vnd.github+json"},
+                           cache: Date.now() < freshUntil ? "no-cache" : "default"});
   if (res.status === 404) throw new Error("Repo or folder not found. Check the repo name and that it is public.");
   if (res.status === 403) throw new Error("GitHub rate limit reached. Try again in a few minutes.");
   if (!res.ok) throw new Error("Could not load files from GitHub.");
   const data = await res.json();
   try { sessionStorage.setItem(key, JSON.stringify(data)); } catch(e){}
   return data;
+}
+
+function reloadTree(repo){
+  Object.keys(sessionStorage)
+    .filter(k => k.startsWith("gh:" + repo + ":") || k.startsWith("gh2:" + repo + ":"))
+    .forEach(k => sessionStorage.removeItem(k));
+  freshUntil = Date.now() + 60000;
+  loadTree(repo, "", $("#tree-body"));
 }
 
 async function loadTree(repo, path, mount){
