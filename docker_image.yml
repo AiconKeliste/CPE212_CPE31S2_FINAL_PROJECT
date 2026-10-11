@@ -1,0 +1,96 @@
+---
+- name: Build Docker image on all VM
+  hosts: docker_hosts
+  become: true
+  vars:
+    image_name: portfolio-web
+    image_tag: "1.0"
+    build_dir: opt/portfolio-build
+
+  tasks:
+    - name: Instlal Docker in Ubuntu
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - python3-docker
+        state: present
+        update_cache: true
+      register: apt_result
+      until: apt_result is succeeded
+      retries: 10
+      delay: 30
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install prerequisites on Centos
+      ansible.builtin.dnf:
+        name:
+          - dnf-plugins-core
+          - python3-pip
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Add Docker CE repo in CentOS
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        mode: "0644"
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Install Docker CE on CentOS
+      ansible.builtin.dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Install Docker SDK for Python on CentOS
+      ansible.builtin.pip:
+        name: docker
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Start and Enable DOcker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Create build directory
+      ansible.builtin.file:
+        path: "{{ build_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Copy Dockerfile
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ build_dir }}/{{ item }}"
+        mode: "0644"
+      loop:
+        - Dockerfile
+        - docker.html
+        - docker.js
+
+    - name: Copy photos folder
+      ansible.builtin.copy:
+        src: photos/
+        dest: "{{ build_dir }}/photos/"
+        mode: "0644"
+        directory_mode: "0755"
+
+    - name: Build Docker Image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
+        source: build
+        build:
+          path: "{{ build_dir }}"
+        state: present
+        force_source: true
+
+    - name: Verify image
+      community.docker.docker_image_info:
+        name: "{{ image_name }}:{{ image_tag }}"
+      register: image_info
