@@ -3,9 +3,9 @@ const BIO = "Group 5";
 // repo links naten
 const members = [
   {name:"Jerald Interno",      bio:BIO, repo:"JeraldSanInterno/CPE232_Jerald_Interno",       photo:"photos/jerald.jpg"},
-  {name:"Melquisedec Iquin",   bio:BIO, repo:"MelquisedecIquin/CPE212_Iquin",                photo:"photos/melquisedec.jpg"},
-  {name:"Kathlyn Javillonar",  bio:BIO, repo:"MadhelKathlynAnnJavillonar/CPE212_Javillonar", photo:"photos/kathlyn.jpg"},
-  {name:"Aicon Keliste",       bio:BIO, repo:"AiconKeliste/CPE212_KELISTE",                  photo:"photos/aicon.png"}
+  {name:"Melquisedec Iquin",   bio:BIO, repo:"MelquisedecIquin/CPE212_Iquin",                photo:"photos/mel.jpg"},
+  {name:"Kathlyn Javillonar",  bio:BIO, repo:"MadhelKathlynAnnJavillonar/CPE212_Javillonar", photo:"photos/kath.jpg"},
+  {name:"Aicon Keliste",       bio:BIO, repo:"AiconKeliste/CPE212_KELISTE",                  photo:"photos/aicon.jpeg"}
 ];
 
 const $ = s => document.querySelector(s);
