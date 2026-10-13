@@ -1,5 +1,5 @@
 // bio ng lahat interchangable naman
-const BIO = "hatdogs";
+const BIO = "Group 5";
 // repo links naten
 const members = [
   {name:"Jerald Interno",      bio:BIO, repo:"JeraldSanInterno/CPE232_Jerald_Interno",       photo:"photos/jerald.jpg"},
