@@ -1,7 +1,7 @@
-// Bio text
+//BIO NG GROUP
 const BIO = "Group 5";
 
-// Team member information
+//INFORMATION NG EACH MEMBER
 const members = [
   {
     name: "Jerald Interno",
@@ -43,7 +43,6 @@ const avatar = m => m.photo
   ? `<div class="avatar"><img src="${m.photo}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover"></div>`
   : `<div class="avatar"><svg viewBox="0 0 80 80"><use href="#photo"/></svg></div>`;
 
-// Terminal Action Links (>_)
 const terms = m => `
   <div class="term-container">
     <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.email)}" target="_blank" rel="noopener" class="term-box" title="Send Email via Gmail to ${m.email}">
@@ -56,10 +55,8 @@ const terms = m => `
     </a>
   </div>`;
 
-// Base GitHub Repository URL for your project
 const REPO_BASE = "https://github.com/AiconKeliste/CPE212_CPE31S2_FINAL_PROJECT";
 
-// Pipeline Stage Interactive Modal Logic
 function openPipelineModal(stage) {
   const modal = $("#pipeline-modal");
   const titleText = $("#modal-title-text span");
@@ -149,7 +146,6 @@ function closePipelineModal() {
   if (modal) modal.hidden = true;
 }
 
-// Close modal when clicking outside box
 window.onclick = function (event) {
   const modal = $("#pipeline-modal");
   if (event.target === modal) {
@@ -157,7 +153,6 @@ window.onclick = function (event) {
   }
 };
 
-// Navigation Tab Switcher
 function show(tab) {
   closeProfile();
   if ($("#overview")) $("#overview").hidden = (tab !== "overview");
@@ -166,7 +161,6 @@ function show(tab) {
   if ($("#tab-portfolios")) $("#tab-portfolios").setAttribute("aria-selected", tab === "portfolios");
 }
 
-// Render Portfolio Cards Grid
 function renderCards() {
   const cardsContainer = $("#cards");
   if (!cardsContainer) return;
@@ -185,7 +179,6 @@ function renderCards() {
   });
 }
 
-// Open Detailed Profile & File Tree
 function openProfile(i) {
   const m = members[i];
   if ($("#cards")) $("#cards").hidden = true;
@@ -225,7 +218,6 @@ function openProfile(i) {
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 let freshUntil = 0;
 
-// Fetch directory contents from GitHub REST API
 async function fetchDir(repo, path) {
   const key = "gh:" + repo + ":" + path;
   try {
@@ -255,7 +247,6 @@ function reloadTree(repo) {
   loadTree(repo, "", $("#tree-body"));
 }
 
-// Populate file and folder tree
 async function loadTree(repo, path, mount) {
   mount.innerHTML = '<p class="status">Loading from GitHub…</p>';
   try {
@@ -291,7 +282,6 @@ async function loadTree(repo, path, mount) {
   }
 }
 
-// Toggle editable text fields for Name & Bio
 function toggleEdit(i) {
   const els = [$("#p-name"), $("#p-bio")];
   const editing = els[0].isContentEditable;
@@ -308,11 +298,9 @@ function toggleEdit(i) {
   }
 }
 
-// Close expanded profile view
 function closeProfile() {
   if ($("#profile")) $("#profile").hidden = true;
   if ($("#cards")) $("#cards").hidden = false;
 }
 
-// Initial render call
 renderCards();
